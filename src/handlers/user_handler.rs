@@ -1,10 +1,10 @@
+use crate::models::user::{CreateUser, User};
 use actix_web::{web, HttpResponse};
-use crate::models::user::{User, CreateUser};
-use std::sync::atomic::{AtomicI32, Ordering};
 use std::collections::BTreeMap;
+use std::sync::atomic::{AtomicI32, Ordering};
 use std::sync::Mutex;
 
-static COUNTER : AtomicI32 = AtomicI32::new(1);
+static COUNTER: AtomicI32 = AtomicI32::new(1);
 static USERS: Mutex<BTreeMap<i32, User>> = Mutex::new(BTreeMap::new());
 
 pub async fn create_user(user: web::Json<CreateUser>) -> HttpResponse {
@@ -27,7 +27,7 @@ pub async fn get_user(user_id: web::Path<i32>) -> HttpResponse {
 }
 
 pub async fn get_users() -> HttpResponse {
-    HttpResponse::Ok().json(USERS.lock().unwrap().values().cloned().collect::<Vec<_>>())
+    HttpResponse::Ok().json(USERS.lock().unwrap().values().collect::<Vec<_>>())
 }
 
 /*pub async fn update_user(user: web::Json<User>) -> HttpResponse {
