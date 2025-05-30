@@ -19,12 +19,12 @@ pub async fn create_user(user: web::Json<CreateUser>) -> HttpResponse {
     HttpResponse::Created().json(new_user)
 }
 
-pub async fn get_user(user_id: web::Path<i32>) -> HttpResponse {
+/*pub async fn get_user(user_id: web::Path<i32>) -> HttpResponse {
     match USERS.lock().unwrap().get(&user_id) {
         Some(user) => HttpResponse::Ok().json(user),
         None => HttpResponse::NotFound().body("User not found"),
     }
-}
+}*/
 
 pub async fn get_users() -> HttpResponse {
     HttpResponse::Ok().json(USERS.lock().unwrap().values().collect::<Vec<_>>())
@@ -42,5 +42,16 @@ pub async fn delete_user(user_id: web::Path<i32>) -> HttpResponse {
     match USERS.lock().unwrap().remove(&user_id) {
         Some(deleted_user) => HttpResponse::Ok().json(deleted_user),
         None => HttpResponse::NotFound().body("User not found"),
+    }
+}
+pub async fn fibonacci(number: web::Path<i32>) -> HttpResponse {
+    HttpResponse::Ok().body(fib_calc(number.clone()).to_string())
+}
+
+fn fib_calc(n: i32) -> i32 {
+    match n {
+        0 => 0,
+        1 => 1,
+        _ => fib_calc(n - 1) + fib_calc(n - 2)
     }
 }
